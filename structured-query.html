@@ -83,8 +83,12 @@ Element providing base query support for varying datasources
                 this.onMutation(this, this.update); // Watch for future updates.
             },
             updateQuery: function() {
-                this.updateOutputQuery();
-                this.fire('query-change', {'query': this.outputQuery});
+                if (this.selectFields && this.selectFields.length > 0 &&
+                        this.fromDatasets && this.fromDatasets.length > 0) {
+                    this.updateOutputQuery();
+                    this.fire('query-change', {'query': this.outputQuery});
+                }
+
             },
             queryConditionChanged: function(event, detail) {
                 this.updateQuery();
