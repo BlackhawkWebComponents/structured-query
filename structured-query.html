@@ -246,15 +246,19 @@ Element providing base query support for varying datasources
     </script>
 </polymer-element>
 
-<polymer-element name="q-condition" attributes="field op value">
+<polymer-element name="q-condition" attributes="field op value value2">
     <template></template>
     <script>
         Polymer('q-condition', {
             field: null,
             op: null,
             value: null,
-            valueChanged: function() {
-                this.fire('query-condition-changed', {"field":this.field,"op":this.op,"value":this.value});
+            value2: null,
+            observe: {
+                'value value2': 'processValueChange'
+            },
+            processValueChange: function() {
+                this.fire('query-condition-changed', {"field":this.field,"op":this.op,"value":this.value,"value2":this.value2});
             }
         });
     </script>
