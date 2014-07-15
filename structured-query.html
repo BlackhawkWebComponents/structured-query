@@ -136,9 +136,13 @@ Element providing base query support for varying datasources
 
                         where += condition.field + op;
 
-                        //TODO: put in logic for string vs integer
-                        if (condition.value != null)
-                            where += "'"+condition.value+"'";
+                        if (condition.value != null) {
+                            if (condition.type == 'integer')
+                                where += condition.value;
+                            else // assume string
+                                where += "'"+condition.value+"'";
+                        }
+
 
                     }
                 }
@@ -247,7 +251,7 @@ Element providing base query support for varying datasources
     </script>
 </polymer-element>
 
-<polymer-element name="q-condition" attributes="field op value value2">
+<polymer-element name="q-condition" attributes="field op value value2 type">
     <template></template>
     <script>
         Polymer('q-condition', {
@@ -255,6 +259,7 @@ Element providing base query support for varying datasources
             op: null,
             value: null,
             value2: null,
+            type:'string',
             observe: {
                 'value value2': 'processValueChange'
             },
