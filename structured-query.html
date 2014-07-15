@@ -136,8 +136,9 @@ Element providing base query support for varying datasources
 
                         where += condition.field + op;
 
+                        //TODO: put in logic for string vs integer
                         if (condition.value != null)
-                            where += condition.value;
+                            where += "'"+condition.value+"'";
 
                     }
                 }
