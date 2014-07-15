@@ -136,6 +136,7 @@ Element providing base query support for varying datasources
 
                         where += condition.field + op;
 
+                        //console.log('condition.value: ' + condition.value);
                         if (condition.value != null) {
                             if (condition.type == 'integer')
                                 where += condition.value;
@@ -160,6 +161,7 @@ Element providing base query support for varying datasources
 
 
                 this.outputQuery.sql = select + from + where + groupBy;
+                //console.log('this.outputQuery.sql: ' + this.outputQuery.sql);
 
             }
         });
