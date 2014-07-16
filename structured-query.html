@@ -33,6 +33,7 @@ Element providing base query support for varying datasources
         <content id="queryFrom" select="q-from"></content>
         <content id="queryWhere" select="q-where"></content>
         <content id="queryGroupBy" select="q-group-by"></content>
+        <content id="queryOrderBy" select="q-order-by"></content>
     </template>
     <script>
         Polymer('structured-query', {
@@ -59,7 +60,7 @@ Element providing base query support for varying datasources
             debug:false,
 
             observe: {
-                'selectFields fromDatasets whereConditions groupByFields': 'updateQuery'
+                'selectFields fromDatasets whereConditions groupByFields orderByFields': 'updateQuery'
             },
             created: function() {
                 this.outputQuery = {};
@@ -67,6 +68,7 @@ Element providing base query support for varying datasources
                 this.fromDatasets = [];
                 this.whereConditions = [];
                 this.groupByFields = [];
+                this.orderByFields = [];
             },
             domReady: function() {
                 this.update();
@@ -80,6 +82,8 @@ Element providing base query support for varying datasources
                     this.whereConditions = this.$.queryWhere.getDistributedNodes()[0].whereConditions;
                 if (this.$.queryGroupBy.getDistributedNodes()[0])
                     this.groupByFields = this.$.queryGroupBy.getDistributedNodes()[0].fields;
+                if (this.$.queryOrderBy.getDistributedNodes()[0])
+                    this.orderByFields = this.$.queryOrderBy.getDistributedNodes()[0].fields;
                 this.onMutation(this, this.update); // Watch for future updates.
             },
             updateQuery: function() {
@@ -159,8 +163,19 @@ Element providing base query support for varying datasources
                     }
                 }
 
+                var orderBy = '';
 
-                this.outputQuery.sql = select + from + where + groupBy;
+                if (this.orderByFields.length > 0) {
+
+                    orderBy = ' order by ';
+                    for (var i = 0; i < this.orderByFields.length; ++i) {
+                        if (i > 0 && this.orderByFields.length > 1)
+                            orderBy += ', ';
+                        orderBy += this.orderByFields[i];
+                    }
+                }
+
+                this.outputQuery.sql = select + from + where + groupBy + orderBy;
                 //console.log('this.outputQuery.sql: ' + this.outputQuery.sql);
 
             }
@@ -276,6 +291,15 @@ Element providing base query support for varying datasources
     <template></template>
     <script>
         Polymer('q-group-by', {
+            fields: []
+        });
+    </script>
+</polymer-element>
+
+<polymer-element name="q-order-by" attributes="fields">
+    <template></template>
+    <script>
+        Polymer('q-order-by', {
             fields: []
         });
     </script>
